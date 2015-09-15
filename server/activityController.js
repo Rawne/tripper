@@ -21,6 +21,9 @@ Meteor.publish('Activity', function(){
         saneActivity.forPerson = activity.forPerson;
         saneActivity.createdBy = activity.createdBy;
         saneActivity.createdAt = new Date();
+				saneActivity.lat = activity.lat;
+				saneActivity.lng = activity.lng;
+
 
         // Insert in mongoDB and return the id of the newly created calEvent
         ActivityList.insert(saneActivity, function(err, ins) {
@@ -35,6 +38,12 @@ Meteor.publish('Activity', function(){
 		return ActivityList.update({_id: id, createdBy: currentUserId}, {$set:{title:title}}, function(err, upd){
 			return upd;
 		});
+	},
+	'updateActivityLocation': function(id, lat, lng){
+	var currentUserId = Meteor.userId();
+	return ActivityList.update({_id: id, createdBy: currentUserId}, {$set:{lat:lat, lng:lng}}, function(err, upd){
+		return upd;
+	});
 	},
 	'updateActivityDate': function(id, start, end){
 	var currentUserId = Meteor.userId();

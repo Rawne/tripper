@@ -9,8 +9,12 @@ Meteor.publish('Markers', function(){
       console.log(currentUserId);
       console.log(this.userId);
       if (lat && long) {
-        Markers.insert({lat: lat, long:long, createdBy: currentUserId}, function(err, ins) {
-          console.log(err);
+        Markers.insert({lat: lat, lng:long, createdBy: currentUserId}, function(err, ins) {
+          if(err)
+          {
+              console.log(err);
+              throw new Meteor.Error(500, err.reason, "An unexpected error occured");
+          }
           return ins;
         });
       } else {
@@ -18,9 +22,14 @@ Meteor.publish('Markers', function(){
       }
     },
     'updateMarkerPosition': function(id, lat, long){
-		var currentUserId = Meteor.userId();
-		return ActivityList.update({_id: id, createdBy: currentUserId}, {$set:{title:title}}, function(err, upd){
-			return upd;
+  		var currentUserId = Meteor.userId();
+  		Markers.update({_id: id, createdBy: currentUserId}, {$set:{lat:lat, lng: long}}, function(err, upd){
+      if(err)
+      {
+          console.log(err);
+          throw new Meteor.Error(500, err.reason, "An unexpected error occured");
+      }
+      return upd;
 		});
 	},
   });

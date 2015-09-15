@@ -17,10 +17,28 @@ height:100%;
 float:left;
 }
 .line{
-height:50%;
+height:100%;
 width:100%;
 }
 
+.modal-event h3{
+  text-align: center;
+}
+
+.details{
+  height:205px;
+}
+
+.info{
+  float:left;
+}
+.go-location{
+  float:right;
+}
+
+.modal-event{
+  left:20%;
+}
 
 .equal, .equal > div[class*='col-'] {
       display: -webkit-box;
@@ -30,3 +48,5 @@ width:100%;
       display: flex;
       flex:1 0 auto;
   }
+.hidden{display:none;}
+#draggable {position:absolute;top:100px; left:500px; width: 32px; height: 32px;z-index:10000;}

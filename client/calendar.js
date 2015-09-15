@@ -1,46 +1,9 @@
 Meteor.subscribe('Activity');
-Session.setDefault('showEditEvent', false);
-Session.setDefault('editing_event', null);
-Template.calendar.showEditEvent = function(){
-  return Session.get('showEditEvent');
-}
-
-Template.editEvent.helpers({
-'evt':function()
-  {
-    return ActivityList.findOne({_id:Session.get('editing_event')});
-  }
-});
-Template.editEvent.events({
-  'click .save':function(evt, tmpl){
-    Meteor.call('updateActivityTitle', Session.get('editing_event'), tmpl.find('#title').value, function(error, result) {
-      if (error) {
-        alert(error.reason);
-      }
-      Session.set('editing_event', null);
-      Session.set('showEditEvent', false);
-    });
-  },
-    'click .delete':function(evt, tmpl){
-      Meteor.call('removeActivityData', Session.get('editing_event'), tmpl.find('#title').value, function(error, result) {
-        if (error) {
-          alert(error.reason);
-        }
-        Session.set('editing_event', null);
-        Session.set('showEditEvent', false);
-      });
-  },
-    'click .cancel':function(evt, tmpl){
-        Session.set('editing_event', null);
-        Session.set('showEditEvent', false);
-  }
-});
-
-
 
 Template.calendar.rendered = function(){
   var calendar = $('#calendar').fullCalendar(
     {
+      height: 750,
     dayClick:function(moment, allDay, jsEvent, view){
       var newActivity = {};
       newActivity.start = moment.toDate();
@@ -71,31 +34,50 @@ Template.calendar.rendered = function(){
       });
     },
     eventClick:function(calEvent, jsEvent, view){
+        var activity = ActivityList.findOne({_id:calEvent.id});
+        $('#draggable').css("left", 500);
+        $('#draggable').css("top", 100);
+
         Session.set('editing_event', calEvent.id);
         Session.set('showEditEvent', true);
     },
     events: function(start, end, timezone, callback) {
       var events = [];
       var activities = ActivityList.find().fetch();
+
       activities.forEach(function(evt){
-        events.push({
+        var color = 'blue';
+
+        var event = {
           id:evt._id,
           title:evt.title,
           start:$.fullCalendar.moment(evt.start),
           end:evt.end
-        })
+        };
+        if(evt._id === Session.get('editing_event'))
+        {
+          event.color = '#378006';
+        }
+        events.push(event);
       })
       callback(events);
     },
     editable:true
   }).data().fullCalendar;
 
-  Deps.autorun(function(){
+  Tracker.autorun(function(){
     allReqsCursor = ActivityList.find().fetch();
     console.log("Autorun -> ", allReqsCursor.length)
     if(calendar)
         calendar.refetchEvents();
-  })
+  });
+
+  Tracker.autorun(function () {
+    console.log('changed2');
+    var eventId = Session.get('editing_event');
+    if(calendar)
+        calendar.refetchEvents();
+  });
 };
 Template.calendar.editing_event = function(){
   return Session.get('editing_event')
