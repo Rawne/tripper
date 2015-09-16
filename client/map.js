@@ -1,5 +1,5 @@
 Meteor.startup(function() {
-  GoogleMaps.load();
+  GoogleMaps.load({libraries: 'geometry,places' });
 
 });
 
@@ -38,7 +38,7 @@ Template.map.onCreated(function() {
         var location = proj.fromPointToLatLng(point);
         console.log(location);
         var activity = Session.get('editing_event');
-        Meteor.call('updateActivityLocation', activity, location.G, location.K, function(error, result) {
+        Meteor.call('updateActivityLocation', activity, location.H, location.L, function(error, result) {
           if (error) {
             alert(error.reason);
           }
@@ -64,6 +64,29 @@ Template.map.onCreated(function() {
       });
    });
 
+   var input = document.getElementById('pac-input');
+   map.instance.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+   var searchBox = new google.maps.places.SearchBox(input);
+
+    google.maps.event.addListener(searchBox, 'places_changed', function() {
+      var place = searchBox.getPlaces()[0];
+
+      if (!place.geometry) return;
+
+      if (place.geometry.viewport) {
+        map.instance.fitBounds(place.geometry.viewport);
+      } else {
+        map.instance.setCenter(place.geometry.location);
+        map.instance.setZoom(16);
+
+        new google.maps.Marker({
+          map: map.instance,
+          title: place.name,
+          position: place.geometry.location
+        });
+      }
+    });
+
    var markers = {};
 
    ActivityList.find().observe({
@@ -88,6 +111,10 @@ Template.map.onCreated(function() {
           Meteor.call('updateActivityLocation', marker.id, event.latLng.lat(), event.latLng.lng(), function(error, result) {
             if (error) {
               alert(error.reason);
+            }
+            else {
+                Session.set('editing_event', result);
+                Session.set('showEditEvent', true);
             }
           });
         });

@@ -8,7 +8,11 @@ Meteor.publish('Activity', function(){
       // Sanitize the input
 			console.log(activity.start);
 			console.log(activity.title);
-      if (activity.createdBy && activity.title && activity.start) {
+			if(!activity.createdBy)
+			{
+				throw new Meteor.Error(500, "please login", "Please login to use calendar");
+			}
+      if (activity.title && activity.start) {
         var saneActivity = {};
         saneActivity.title = activity.title;
         saneActivity.start = activity.start;
@@ -26,32 +30,24 @@ Meteor.publish('Activity', function(){
 
 
         // Insert in mongoDB and return the id of the newly created calEvent
-        ActivityList.insert(saneActivity, function(err, ins) {
-          return ins;
-        });
+        return ActivityList.insert(saneActivity);
       } else {
         throw new Meteor.Error(500, "incorrect data", "The data you provided was incorrect");
       }
     },
     'updateActivityTitle': function(id, title){
 		var currentUserId = Meteor.userId();
-		return ActivityList.update({_id: id, createdBy: currentUserId}, {$set:{title:title}}, function(err, upd){
-			return upd;
-		});
+		return ActivityList.update({_id: id, createdBy: currentUserId}, {$set:{title:title}});
 	},
 	'updateActivityLocation': function(id, lat, lng){
-	var currentUserId = Meteor.userId();
-	return ActivityList.update({_id: id, createdBy: currentUserId}, {$set:{lat:lat, lng:lng}}, function(err, upd){
-		return upd;
-	});
+		var currentUserId = Meteor.userId();
+		return ActivityList.update({_id: id, createdBy: currentUserId}, {$set:{lat:lat, lng:lng}});
 	},
 	'updateActivityDate': function(id, start, end){
 	var currentUserId = Meteor.userId();
 	if(start)
 	{
-		return ActivityList.update({_id: id, createdBy: currentUserId}, {$set:{start:start, end:end}}, function(err, upd){
-			return upd;
-		});
+			return ActivityList.update({_id: id, createdBy: currentUserId}, {$set:{start:start, end:end}});
 	}
 	},
     'removeActivityData': function(selectedActivityId){

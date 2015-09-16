@@ -16,6 +16,7 @@ Template.calendar.rendered = function(){
           alert(error.reason);
         }
         else {
+          console.log(result);
           Session.set('editing_event', result);
           Session.set('showEditEvent', true);
         }
