@@ -22,7 +22,7 @@
 
 function confirm(tmpl)
 {
-  Meteor.call('updateActivityTitle', Session.get('editing_event'), tmpl.find('#title').value, function(error, result) {
+  Meteor.call('updateActivityData', Session.get('editing_event'), tmpl.find('#title').value, tmpl.find('#content').value, function(error, result) {
     if (error) {
       alert(error.reason);
     }
@@ -55,7 +55,7 @@ function confirm(tmpl)
      $("#draggable").draggable({revert: "invalid"});
    },
    'mouseover .modal-event' : function(){
-     $( ".modal-event" ).draggable({ containment: "#calendar-container", scroll: false });     
+     $( ".modal-event" ).draggable({ containment: "#calendar-container", scroll: false });
    },
    'click .save':function(evt, tmpl){
      confirm(tmpl);

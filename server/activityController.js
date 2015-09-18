@@ -1,6 +1,6 @@
-Meteor.publish('Activity', function(){
-		var currentUserId = this.userId;
-		return ActivityList.find({createdBy: currentUserId})
+	Meteor.publish('Activity', function publishFunction(trip) {
+		console.log(trip);
+	  return ActivityList.find({trip: trip});
 	});
 
 	Meteor.methods({
@@ -12,9 +12,10 @@ Meteor.publish('Activity', function(){
 			{
 				throw new Meteor.Error(500, "please login", "Please login to use calendar");
 			}
-      if (activity.title && activity.start) {
+      if (activity.title && activity.start && activity.trip) {
         var saneActivity = {};
         saneActivity.title = activity.title;
+        saneActivity.trip = activity.trip;
         saneActivity.start = activity.start;
         //current implementation uses only events on 1 day, without time. not gonna be bothered to make it anymore complicated at this point. hence "start = end"
         saneActivity.end = activity.start;
@@ -35,9 +36,9 @@ Meteor.publish('Activity', function(){
         throw new Meteor.Error(500, "incorrect data", "The data you provided was incorrect");
       }
     },
-    'updateActivityTitle': function(id, title){
+    'updateActivityData': function(id, title, content){
 		var currentUserId = Meteor.userId();
-		return ActivityList.update({_id: id, createdBy: currentUserId}, {$set:{title:title}});
+		return ActivityList.update({_id: id, createdBy: currentUserId}, {$set:{title:title, content:content}});
 	},
 	'updateActivityLocation': function(id, lat, lng){
 		var currentUserId = Meteor.userId();

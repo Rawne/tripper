@@ -3,10 +3,10 @@
 		<div class="navbar-inner">
 			<a class="brand" href="#">Tripper</a>
 			<ul class="nav">
-				<li class="active"><a href="/">Home -Active</a></li>
-				<li><a href="/calendar">Calendar</a></li>
-				<li><a href="#">link</a></li>
-
+				<li class="{{#if currentRouteIs 'home'}}active{{/if}}"><a href="/">Home</a></li>
+				{{#each trips}}
+					<li class="{{#if currentRouteIs 'trip' _id}}active{{/if}}"> <a href="/trip/{{_id}}">{{title}}</a></li>
+				{{/each}}
 				<li>{{> loginButtons}}</li>
 			</ul>
 	</div>

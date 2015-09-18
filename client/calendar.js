@@ -1,13 +1,19 @@
-Meteor.subscribe('Activity');
 
 Template.calendar.rendered = function(){
   var calendar = $('#calendar').fullCalendar(
     {
       height: 750,
     dayClick:function(moment, allDay, jsEvent, view){
+      if(Session.get('showEditEvent'))
+      {
+        Session.set('showEditEvent', false);
+        Session.set('editing_event', null);
+        return false;
+      }
       var newActivity = {};
       newActivity.start = moment.toDate();
       newActivity.title = "new event";
+      newActivity.trip = Session.get('trip');
       newActivity.createdBy = Meteor.userId();
       //newActivity.forPerson = Iron.Location.get().path.substring(22);
       console.log(moment);
@@ -66,6 +72,10 @@ Template.calendar.rendered = function(){
     editable:true
   }).data().fullCalendar;
 
+  Tracker.autorun(function(){
+    console.log('template:', Session.get('trip'));
+    Meteor.subscribe('Activity', Session.get('trip'));
+  });
   Tracker.autorun(function(){
     allReqsCursor = ActivityList.find().fetch();
     console.log("Autorun -> ", allReqsCursor.length)
