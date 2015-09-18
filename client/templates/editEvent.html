@@ -1,21 +1,23 @@
 <template name="editEvent">
-<div class="modal modal-event">
-  <h3>Event</h3>
-  <div class="modal-body" id="">
-    <div class="info">
-      <label for="title">Title</label><input type="text" name="title" value="{{evt.title}}" id="title">
-        <label for="content">Description</label><input type="text" name="content" value="{{evt.content}}" id="content">
-    </div>
-    <div class="go-location">
-      <label for="title">Location</label>
-    {{#if markerPlaced}}<a href="#" class="center">Show on map</a>{{/if}}
-    </div>
-  </div>
+  <div id="editEvent-modal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close cancel" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4><span id="editable-title" data-type="text" data-placeholder="Enter text" data-rows="1" class="editable modal-title"></span></h4>
+        </div>
+        <div class="modal-body">
+          <span id="event-content" class="editable" data-type="textarea" data-placeholder="Enter text" data-emptytext="Click to enter a description" data-rows="4"></span>
+
+            {{#if markerPlaced}}<div class="go-location"><a href="#" class="center">Show on map</a></div>{{/if}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger delete">Delete</button>
+          <button type="button" class="btn btn-default cancel">Close</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
   {{#unless markerPlaced}}<img id="draggable" src='/pin.png'/>{{/unless}}
-  <div class="modal-footer">
-  <a href="#" class="btn btn-success save">Save</a>
-  <a href="#" class="btn btn delete">Delete</a>
-  <a href="#" class="btn cancel" data-dismiss="modal">Cancel</a>
-</div>
-</div>
+
 </template>

@@ -40,6 +40,10 @@ width:100%;
   left:20%;
 }
 
+.modal{
+  position:absolute;
+}
+
 .equal, .equal > div[class*='col-'] {
       display: -webkit-box;
       display: -moz-box;
@@ -49,4 +53,4 @@ width:100%;
       flex:1 0 auto;
   }
 .hidden{display:none;}
-#draggable {position:absolute;top:100px; left:500px; width: 32px; height: 32px;z-index:10000;}
+#draggable {position:absolute;top:100px; left:600px; width: 32px; height: 32px;z-index:10000;}

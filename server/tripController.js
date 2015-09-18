@@ -23,5 +23,9 @@ Meteor.publish('Trip', function(){
         } else {
           throw new Meteor.Error(500, "incorrect data", "The data you provided was incorrect");
         }
-      }
+      },
+      'updateTripInfo':function(id, info){
+  		var currentUserId = Meteor.userId();
+  		return TripList.update({_id: id, createdBy: currentUserId}, {$set:{info:info}});
+  	}
     });

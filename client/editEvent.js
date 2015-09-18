@@ -1,8 +1,39 @@
  Session.setDefault('showEditEvent', false);
  Session.setDefault('editing_event', null);
- Template.calendar.showEditEvent = function(){
-   return Session.get('showEditEvent');
- }
+
+ Template.editEvent.rendered = function(){
+   var options = {
+     show:true,
+     backdrop: 'static',
+     keyboard : false,
+   }
+   $('#editEvent-modal').modal(options);
+   $('.modal-backdrop').removeClass("modal-backdrop");
+
+   $('#editable-title.editable').editable({
+   mode : 'inline',
+   value : ActivityList.findOne({_id:Session.get('editing_event')}).title,
+   success: function(response, newValue) {
+     Meteor.call('updateActivityTitle', Session.get('editing_event'), newValue, function(error, result)
+     {
+       if (error) {
+         alert(error.reason);
+       }
+     });
+   }});
+
+   $('#event-content.editable').editable({
+      mode : 'inline',
+      value : ActivityList.findOne({_id:Session.get('editing_event')}).content,
+      success: function(response, newValue) {
+        Meteor.call('updateActivityContent', Session.get('editing_event'), newValue, function(error, result)
+        {
+          if (error) {
+            alert(error.reason);
+          }
+        });
+      }});
+}
 
  Template.editEvent.helpers({
    'evt':function()
@@ -20,15 +51,10 @@
      }
  });
 
-function confirm(tmpl)
+function close()
 {
-  Meteor.call('updateActivityData', Session.get('editing_event'), tmpl.find('#title').value, tmpl.find('#content').value, function(error, result) {
-    if (error) {
-      alert(error.reason);
-    }
     Session.set('editing_event', null);
     Session.set('showEditEvent', false);
-  });
 }
 
  Template.editEvent.events({
@@ -37,17 +63,10 @@ function confirm(tmpl)
       GoogleMaps.maps.map.instance.panTo(new google.maps.LatLng(activity.lat, activity.lng));
       return false;
    },
-   'keypress input': function(event, tmpl) {
-    if (event.keyCode == 13) {
-        confirm(tmpl);
-        event.stopPropagation();
-        return false;
-    }
-    else if(event.keyCode == 27)
+   'keydown': function(event, tmpl) {
+    if(event.keyCode == 27)
     {
-        Session.set('editing_event', null);
-        Session.set('showEditEvent', false);
-        event.stopPropagation();
+        close();
         return false;
     }
   },
@@ -57,11 +76,8 @@ function confirm(tmpl)
    'mouseover .modal-event' : function(){
      $( ".modal-event" ).draggable({ containment: "#calendar-container", scroll: false });
    },
-   'click .save':function(evt, tmpl){
-     confirm(tmpl);
-   },
      'click .delete':function(evt, tmpl){
-       Meteor.call('removeActivityData', Session.get('editing_event'), tmpl.find('#title').value, function(error, result) {
+       Meteor.call('removeActivityData', Session.get('editing_event'), function(error, result) {
          if (error) {
            alert(error.reason);
          }
@@ -70,7 +86,6 @@ function confirm(tmpl)
        });
    },
      'click .cancel':function(evt, tmpl){
-         Session.set('editing_event', null);
-         Session.set('showEditEvent', false);
+         close();
    }
  });

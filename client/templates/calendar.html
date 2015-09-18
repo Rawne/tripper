@@ -1,10 +1,8 @@
 <template name="calendar">
-  {{#if showEditEvent}}
-  {{>editEvent}}
-  {{/if}}
-  <div class="line">
-
       <div id="calendar-container" class="col-md-6 quad">
+        {{#if showEditEvent}}
+        {{>editEvent}}
+        {{/if}}
         <input type="hidden" name="lastMod" value="{{lastMod}}" id="lastMod"/>
         <div class="hero-unit">
           <div id="calendar"></div>
@@ -13,7 +11,6 @@
 
       <div class="col-md-6 quad">
         {{>map}}
+        {{>trip}}
       </div>
-
-    </div>
 </template>

@@ -73,7 +73,6 @@ Template.calendar.rendered = function(){
   }).data().fullCalendar;
 
   Tracker.autorun(function(){
-    console.log('template:', Session.get('trip'));
     Meteor.subscribe('Activity', Session.get('trip'));
   });
   Tracker.autorun(function(){
@@ -84,12 +83,16 @@ Template.calendar.rendered = function(){
   });
 
   Tracker.autorun(function () {
-    console.log('changed2');
     var eventId = Session.get('editing_event');
     if(calendar)
         calendar.refetchEvents();
   });
 };
-Template.calendar.editing_event = function(){
-  return Session.get('editing_event')
-}
+Template.calendar.helpers({
+  editing_event : function(){
+    return Session.get('editing_event');
+  },
+  showEditEvent : function(){
+    return Session.get('showEditEvent');
+  }
+});

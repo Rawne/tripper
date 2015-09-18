@@ -1,5 +1,4 @@
 	Meteor.publish('Activity', function publishFunction(trip) {
-		console.log(trip);
 	  return ActivityList.find({trip: trip});
 	});
 
@@ -36,10 +35,14 @@
         throw new Meteor.Error(500, "incorrect data", "The data you provided was incorrect");
       }
     },
-    'updateActivityData': function(id, title, content){
+    'updateActivityTitle': function(id, title){
 		var currentUserId = Meteor.userId();
-		return ActivityList.update({_id: id, createdBy: currentUserId}, {$set:{title:title, content:content}});
+		return ActivityList.update({_id: id, createdBy: currentUserId}, {$set:{title:title}});
 	},
+	'updateActivityContent': function(id, content){
+	var currentUserId = Meteor.userId();
+	return ActivityList.update({_id: id, createdBy: currentUserId}, {$set:{content:content}});
+},
 	'updateActivityLocation': function(id, lat, lng){
 		var currentUserId = Meteor.userId();
 		return ActivityList.update({_id: id, createdBy: currentUserId}, {$set:{lat:lat, lng:lng}});

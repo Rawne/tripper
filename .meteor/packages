@@ -7,10 +7,11 @@
 meteor-platform
 insecure
 accounts-password
-bootstrap
 jquery
 iron:router
 rzymek:fullcalendar
-accounts-ui
 dburles:google-maps
 mizzao:jquery-ui
+ian:accounts-ui-bootstrap-3
+twbs:bootstrap
+natestrauser:x-editable-bootstrap

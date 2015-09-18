@@ -113,7 +113,7 @@ Template.map.onCreated(function() {
               alert(error.reason);
             }
             else {
-                Session.set('editing_event', result);
+                Session.set('editing_event', marker.id);
                 Session.set('showEditEvent', true);
             }
           });
