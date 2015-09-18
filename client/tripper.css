@@ -1,60 +1,60 @@
-html,body {
-        padding:0;
-        margin:0;
-        height:100%;
-        min-height:100%;
-      }
-
-      .map-container {
-        width: 100%;
-        max-width: 100%;
-        height: 500px;
-      }
-
-.quad{
-width:50%;
-height:100%;
-float:left;
+html, body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  min-height: 100%;
 }
-.line{
-height:100%;
-width:100%;
+.map-container {
+  width: 100%;
+  max-width: 100%;
+  height: 500px;
 }
-
-.modal-event h3{
+.quad {
+  width: 50%;
+  height: 100%;
+  float: left;
+}
+.line {
+  height: 100%;
+  width: 100%;
+}
+.modal-event h3 {
   text-align: center;
 }
-
-.details{
-  height:205px;
+.details {
+  height: 205px;
 }
-
-.info{
-  float:left;
+.info {
+  float: left;
 }
-.go-location{
-  float:right;
+.go-location {
+  float: right;
 }
-
-.last{
-  float:right;
+.last {
+  float: right;
 }
-
-.modal-event{
-  left:20%;
+.modal-event {
+  left: 20%;
 }
-
-.modal{
-  position:absolute;
+.modal {
+  position: absolute;
 }
-
 .equal, .equal > div[class*='col-'] {
-      display: -webkit-box;
-      display: -moz-box;
-      display: -ms-flexbox;
-      display: -webkit-flex;
-      display: flex;
-      flex:1 0 auto;
-  }
-.hidden{display:none;}
-#draggable {position:absolute;top:100px; left:600px; width: 32px; height: 32px;z-index:10000;}
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  flex: 1 0 auto;
+}
+.hidden {
+  display: none;
+}
+#draggable {
+  position: absolute;
+  top: 100px;
+  left: 600px;
+  width: 32px;
+  height: 32px;
+  z-index: 10000;
+}
