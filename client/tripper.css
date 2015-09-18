@@ -36,6 +36,10 @@ width:100%;
   float:right;
 }
 
+.last{
+  float:right;
+}
+
 .modal-event{
   left:20%;
 }

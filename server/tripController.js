@@ -27,5 +27,9 @@ Meteor.publish('Trip', function(){
       'updateTripInfo':function(id, info){
   		var currentUserId = Meteor.userId();
   		return TripList.update({_id: id, createdBy: currentUserId}, {$set:{info:info}});
+  	},
+      'deleteTrip': function(tripId){
+  		var currentUserId = Meteor.userId();
+  		TripList.remove({_id: tripId, createdBy: currentUserId});
   	}
     });
