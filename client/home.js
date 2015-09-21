@@ -1,11 +1,11 @@
-Meteor.subscribe('Trip');
+
+
 Template.homepage.events({
   'click #start-button': function(event, tmpl) {
-    console.log('start');
     var newTrip = {};
     newTrip.title = "new trip";
-    newTrip.createdBy = Meteor.userId();
-    newTrip.users = [Meteor.userId()];
+    newTrip.createdBy = getUserId();
+    newTrip.users = [getUserId()];
     Meteor.call('insertTrip', newTrip, function(error, result) {
       if (error) {
         alert(error.reason);
@@ -18,20 +18,27 @@ Template.homepage.events({
 });
 
 Template.homepage.helpers({
-  noTrips: function() {
-    if (TripList.find())
-      return false;
-    return true;
+  anyTrips: function() {
+    if (TripList.find({createdBy:getUserId()}).fetch().length > 0)
+      return true;
+    return false;
+  },
+  anySharedTrips: function() {
+    if (TripList.find({users:getUserId(), createdBy:{ $not:getUserId()}}).fetch().length > 0)
+      return true;
+    return false;
   },
   'trips': function() {
-    return TripList.find();
+    return TripList.find({createdBy:getUserId()});
+  },
+  'sharedTrips': function() {
+    return TripList.find({users:getUserId(), createdBy:{ $not:getUserId()}});
   }
 });
 
 Template.homepage.events({
   'click .delete': function(evt, tmpl) {
-    console.log(evt.target.parentElement.id);
-    Meteor.call('deleteTrip', evt.target.parentElement.id, function(error, result) {
+    Meteor.call('deleteTrip', evt.target.parentElement.id, getUserId(), function(error, result) {
       if (error) {
         alert(error.reason);
       }

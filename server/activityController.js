@@ -35,27 +35,23 @@
         throw new Meteor.Error(500, "incorrect data", "The data you provided was incorrect");
       }
     },
-    'updateActivityTitle': function(id, title){
-		var currentUserId = Meteor.userId();
-		return ActivityList.update({_id: id, createdBy: currentUserId}, {$set:{title:title}});
+    'updateActivityTitle': function(id, userId, title){
+			console.log(userId);
+		return ActivityList.update({_id: id, createdBy: userId}, {$set:{title:title}});
 	},
-	'updateActivityContent': function(id, content){
-	var currentUserId = Meteor.userId();
-	return ActivityList.update({_id: id, createdBy: currentUserId}, {$set:{content:content}});
+	'updateActivityContent': function(id, userId, content){
+	return ActivityList.update({_id: id, createdBy: userId}, {$set:{content:content}});
 },
-	'updateActivityLocation': function(id, lat, lng){
-		var currentUserId = Meteor.userId();
-		return ActivityList.update({_id: id, createdBy: currentUserId}, {$set:{lat:lat, lng:lng}});
+	'updateActivityLocation': function(id, userId, lat, lng){
+		return ActivityList.update({_id: id, createdBy: userId}, {$set:{lat:lat, lng:lng}});
 	},
-	'updateActivityDate': function(id, start, end){
-	var currentUserId = Meteor.userId();
+	'updateActivityDate': function(id, userId, start, end){
 	if(start)
 	{
-			return ActivityList.update({_id: id, createdBy: currentUserId}, {$set:{start:start, end:end}});
+			return ActivityList.update({_id: id, createdBy: userId}, {$set:{start:start, end:end}});
 	}
 	},
-    'removeActivityData': function(selectedActivityId){
-		var currentUserId = Meteor.userId();
-		ActivityList.remove({_id: selectedActivityId, createdBy: currentUserId});
+    'removeActivityData': function(selectedActivityId, userId){
+		ActivityList.remove({_id: selectedActivityId, createdBy: userId});
 	}
 });

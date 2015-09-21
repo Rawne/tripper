@@ -1,5 +1,9 @@
-Meteor.publish('Trip', function(){
+Meteor.publish('Trip', function tripFunction(anonymousId){
 		var currentUserId = this.userId;
+		if(currentUserId == null && anonymousId != null)
+		{
+			currentUserId = anonymousId;
+		}
 		return TripList.find({users: currentUserId})
 	});
 
@@ -24,12 +28,18 @@ Meteor.publish('Trip', function(){
           throw new Meteor.Error(500, "incorrect data", "The data you provided was incorrect");
         }
       },
-      'updateTripInfo':function(id, info){
-  		var currentUserId = Meteor.userId();
-  		return TripList.update({_id: id, createdBy: currentUserId}, {$set:{info:info}});
+      'updateTripInfo':function(id, userId, info){
+  		return TripList.update({_id: id, createdBy: userId}, {$set:{info:info}});
   	},
-      'deleteTrip': function(tripId){
-  		var currentUserId = Meteor.userId();
-  		TripList.remove({_id: tripId, createdBy: currentUserId});
+		'convertUserIds':function(oldId, newId){			
+			var result = TripList.update({createdBy: oldId}, {$set:{createdBy:newId, users:[newId]}})
+			if(result)
+			{
+				result = ActivityList.update({createdBy: oldId}, {$set:{createdBy:newId}});
+			}
+			return result;
+		},
+      'deleteTrip': function(tripId, userId){
+  		TripList.remove({_id: tripId, createdBy: userId});
   	}
     });

@@ -4,13 +4,23 @@
     <h4>If you are planning a trip, you are at the right place!</h4>
         <br><br>
     <ul>
-    {{#if trips}}
+    {{#if anyTrips}}
       <p>Your trips:</p>
     {{/if}}
     {{#each trips}}
-      <li id="{{_id}}" class="list-group-item"> <a href="/trip/{{_id}}">{{title}}</a> <button type="button" class="btn btn-danger delete badge">Delete</button></li>
+      <li id="{{_id}}" class="list-group-item"> <a class="trip-link" href="/trip/{{_id}}">{{title}}</a>
+        <button type="button" class="btn btn-danger delete label label-danger last">Delete</button>
+      </li>
+    {{/each}}
+    <br><br>
+    {{#if anySharedTrips}}
+    <p>Trips shared with you:</p>
+    {{/if}}
+    {{#each sharedTrips}}
+      <li id="{{_id}}" class="list-group-item"> <a class="trip-link" href="/trip/{{_id}}">{{title}}</a>
+      </li>
     {{/each}}
     </ul>
-      <p><button id="start-button" type="button" class="btn btn-lg btn-primary">{{#if noTrips}}Start now!{{else}}Start new trip!{{/if}}</button></p>
+      <p><button id="start-button" type="button" class="btn btn-lg btn-primary">{{#if trips}}Start another trip!{{else}}Start now!{{/if}}</button></p>
   </div>
 </template>

@@ -38,7 +38,7 @@ Template.map.onCreated(function() {
         var location = proj.fromPointToLatLng(point);
         console.log(location);
         var activity = Session.get('editing_event');
-        Meteor.call('updateActivityLocation', activity, location.H, location.L, function(error, result) {
+        Meteor.call('updateActivityLocation', activity, getUserId(), location.H, location.L, function(error, result) {
           if (error) {
             alert(error.reason);
           }
@@ -49,7 +49,7 @@ Template.map.onCreated(function() {
       var newActivity = {};
       newActivity.start = new Date();
       newActivity.title = "new event";
-      newActivity.createdBy = Meteor.userId();
+      newActivity.createdBy = getUserId();
       newActivity.lat = event.latLng.lat();
       newActivity.lng = event.latLng.lng();
       //newActivity.forPerson = Iron.Location.get().path.substring(22);
@@ -108,7 +108,7 @@ Template.map.onCreated(function() {
         marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
         // This listener lets us drag markers on the map and update their corresponding document.
         google.maps.event.addListener(marker, 'dragend', function(event) {
-          Meteor.call('updateActivityLocation', marker.id, event.latLng.lat(), event.latLng.lng(), function(error, result) {
+          Meteor.call('updateActivityLocation', marker.id, getUserId(), event.latLng.lat(), event.latLng.lng(), function(error, result) {
             if (error) {
               alert(error.reason);
             }

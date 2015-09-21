@@ -16,7 +16,8 @@
        _id: Session.get('editing_event')
      }).title,
      success: function(response, newValue) {
-       Meteor.call('updateActivityTitle', Session.get('editing_event'), newValue, function(error, result) {
+       console.log(getUserId());
+       Meteor.call('updateActivityTitle', Session.get('editing_event'), getUserId(), newValue, function(error, result) {
          if (error) {
            alert(error.reason);
          }
@@ -30,7 +31,7 @@
        _id: Session.get('editing_event')
      }).content,
      success: function(response, newValue) {
-       Meteor.call('updateActivityContent', Session.get('editing_event'), newValue, function(error, result) {
+       Meteor.call('updateActivityContent', Session.get('editing_event'), getUserId(), newValue, function(error, result) {
          if (error) {
            alert(error.reason);
          }
@@ -87,7 +88,7 @@
      });
    },
    'click .delete': function(evt, tmpl) {
-     Meteor.call('removeActivityData', Session.get('editing_event'), function(error, result) {
+     Meteor.call('removeActivityData', Session.get('editing_event'), getUserId(), function(error, result) {
        if (error) {
          alert(error.reason);
        }

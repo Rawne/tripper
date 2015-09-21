@@ -47,6 +47,10 @@ html, body {
   display: flex;
   flex: 1 0 auto;
 }
+.trip-link{
+  font-size: large;
+  font-weight: bold;
+}
 .hidden {
   display: none;
 }

@@ -11,7 +11,7 @@ Template.calendar.rendered = function() {
       newActivity.start = moment.toDate();
       newActivity.title = "new event";
       newActivity.trip = Session.get('trip');
-      newActivity.createdBy = Meteor.userId();
+      newActivity.createdBy = getUserId();
       //newActivity.forPerson = Iron.Location.get().path.substring(22);
       console.log(moment);
       Meteor.call('insertActivityData', newActivity, function(error, result) {
@@ -27,7 +27,7 @@ Template.calendar.rendered = function() {
     eventDrop: function(calEvent) {
       var startDate = calEvent.start ? calEvent.start.toDate() : null;
       var endDate = calEvent.end ? calEvent.end.toDate() : null;
-      Meteor.call('updateActivityDate', calEvent.id, startDate,
+      Meteor.call('updateActivityDate', calEvent.id, getUserId(), startDate,
         endDate,
         function(error, result) {
           if (error) {
