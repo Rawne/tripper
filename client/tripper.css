@@ -67,3 +67,7 @@ html, body {
   top:10px !important;
   width:200px;
 }
+
+.carousel-inner{
+  max-height: 200px !important;
+}

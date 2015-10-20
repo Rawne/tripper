@@ -10,6 +10,31 @@
           <span id="event-content" class="editable" data-type="textarea" data-placeholder="Enter text" data-emptytext="Click to enter a description" data-rows="4">{{evt.content}}</span>
 
             {{#if markerPlaced}}<div class="go-location"><a href="#" class="center">Show on map</a></div>{{/if}}
+            <br/>  <br/>
+
+                <div class="col-sm-6"><input id="image-field" type="text" value="" placeholder="place image link here"/></div>
+                <div class="col-sm-6"><button type="button" class="btn btn-info save-image">Add image</button></div>
+            <br/><br/>
+
+            <div id="myCarousel" class="carousel slide">
+              <ol class="carousel-indicators">
+                {{#each images}}
+                  <li data-target="#myCarousel" data-slide-to="{{index}}" class="{{active}}"></li>
+                {{/each}}
+              </ol>
+              <div class="carousel-inner">
+                {{#each images}}
+                  <div class="item {{active}}">
+                      <a href="{{url}}" target="_blank">
+                          <img src="{{url}}" alt="">
+                      </a>
+                  </div>
+                  {{/each}}
+              </div>
+              <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+              <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+          </div>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger delete">Delete</button>

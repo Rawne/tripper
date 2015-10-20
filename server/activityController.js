@@ -53,5 +53,12 @@
 	},
     'removeActivityData': function(selectedActivityId, userId){
 		ActivityList.remove({_id: selectedActivityId, createdBy: userId});
+	},
+    'addImageToActivity': function(id, userId, imageLink){
+			console.log(imageLink);
+			if(imageLink)
+			{
+				return ActivityList.update({_id: id, createdBy: userId}, {$push:{images:imageLink}});
+		}
 	}
 });

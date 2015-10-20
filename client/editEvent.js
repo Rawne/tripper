@@ -64,6 +64,19 @@
    },
    'hasEditRights' : function(){
      return hasEditRights();
+   },
+   'images': function() {
+     var activity = ActivityList.findOne({
+       _id: Session.get('editing_event')
+     });
+     var imageTemplates = [];
+     var i = 0;
+     activity.images.forEach(function(url) {
+        imageTemplates.push({url:url, index:i, active: i == 0 ? "active" : ""});
+        i++;
+     });
+     console.log(imageTemplates);
+     return imageTemplates;
    }
  });
 
@@ -108,5 +121,13 @@
    },
    'click .cancel': function(evt, tmpl) {
      close();
+   },
+   'click .save-image': function(evt, tmpl) {
+     console.log($("#image-field"));
+     Meteor.call('addImageToActivity', Session.get('editing_event'), getUserId(), $("#image-field").val(), function(error, result) {
+       if (error) {
+         alert(error.reason);
+       }
+     });
    }
  });
