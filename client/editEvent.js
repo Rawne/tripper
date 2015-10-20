@@ -9,35 +9,42 @@
    }
    $('#editEvent-modal').modal(options);
    $('.modal-backdrop').removeClass("modal-backdrop");
+   if (hasEditRights()) {
+     $('#editable-title.editable').editable({
+       mode: 'inline',
+       value: ActivityList.findOne({
+         _id: Session.get('editing_event')
+       }).title,
+       success: function(response, newValue) {
+         console.log(getUserId());
+         Meteor.call('updateActivityTitle', Session.get('editing_event'), getUserId(), newValue, function(error, result) {
+           if (error) {
+             alert(error.reason);
+           }
+         });
+       }
+     });
 
-   $('#editable-title.editable').editable({
-     mode: 'inline',
-     value: ActivityList.findOne({
+     $('#event-content.editable').editable({
+       mode: 'inline',
+       value: ActivityList.findOne({
+         _id: Session.get('editing_event')
+       }).content,
+       success: function(response, newValue) {
+         Meteor.call('updateActivityContent', Session.get('editing_event'), getUserId(), newValue, function(error, result) {
+           if (error) {
+             alert(error.reason);
+           }
+         });
+       }
+     });
+   }
+   else
+   {
+     $('#event-content.editable').html(ActivityList.findOne({
        _id: Session.get('editing_event')
-     }).title,
-     success: function(response, newValue) {
-       console.log(getUserId());
-       Meteor.call('updateActivityTitle', Session.get('editing_event'), getUserId(), newValue, function(error, result) {
-         if (error) {
-           alert(error.reason);
-         }
-       });
-     }
-   });
-
-   $('#event-content.editable').editable({
-     mode: 'inline',
-     value: ActivityList.findOne({
-       _id: Session.get('editing_event')
-     }).content,
-     success: function(response, newValue) {
-       Meteor.call('updateActivityContent', Session.get('editing_event'), getUserId(), newValue, function(error, result) {
-         if (error) {
-           alert(error.reason);
-         }
-       });
-     }
-   });
+     }).content);
+   }
  }
 
  Template.editEvent.helpers({
@@ -54,6 +61,9 @@
        return true;
      }
      return false;
+   },
+   'hasEditRights' : function(){
+     return hasEditRights();
    }
  });
 

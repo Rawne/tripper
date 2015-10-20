@@ -1,13 +1,30 @@
 Meteor.startup(function() {
-  GoogleMaps.load({libraries: 'geometry,places' });
+  GoogleMaps.load({
+    libraries: 'geometry,places'
+  });
 
 });
 
+function getLatLong()
+{
+  var lat = -37.8136;
+  var lng = 144.9631;
+  var trip = TripList.findOne({
+    _id: Session.get('trip')});
+  if(trip && trip.lat && trip.lng)
+  {
+    lat = trip.lat;
+    lng = trip.lng;
+  }
+  return {lat: lat, lng:lng};
+}
+
 Template.map.helpers({
   mapOptions: function() {
+    var coords = getLatLong();
     if (GoogleMaps.loaded()) {
       return {
-        center: new google.maps.LatLng(-37.8136, 144.9631),
+        center: new google.maps.LatLng(coords.lat, coords.lng),
         zoom: 8
       };
     }
@@ -16,11 +33,11 @@ Template.map.helpers({
 Template.map.onCreated(function() {
   GoogleMaps.ready('map', function(map) {
     $(".map-container").droppable({
-      drop: function( event, ui ) {
-        var mOffset=$(map.instance.getDiv()).offset();
-        var pixel=new google.maps.Point(
-            ui.offset.left-mOffset.left+(ui.helper.width()/2),
-            ui.offset.top-mOffset.top+(ui.helper.height())
+      drop: function(event, ui) {
+        var mOffset = $(map.instance.getDiv()).offset();
+        var pixel = new google.maps.Point(
+          ui.offset.left - mOffset.left + (ui.helper.width() / 2),
+          ui.offset.top - mOffset.top + (ui.helper.height())
         );
         var scale = Math.pow(2, map.instance.getZoom());
         var proj = map.instance.getProjection();
@@ -38,7 +55,7 @@ Template.map.onCreated(function() {
         var location = proj.fromPointToLatLng(point);
         console.log(location);
         var activity = Session.get('editing_event');
-        Meteor.call('updateActivityLocation', activity, getUserId(), location.H, location.L, function(error, result) {
+        Meteor.call('updateActivityLocation', activity, getUserId(), location.lat(), location.lng(), function(error, result) {
           if (error) {
             alert(error.reason);
           }
@@ -52,26 +69,30 @@ Template.map.onCreated(function() {
       newActivity.createdBy = getUserId();
       newActivity.lat = event.latLng.lat();
       newActivity.lng = event.latLng.lng();
-      //newActivity.forPerson = Iron.Location.get().path.substring(22);
+      newActivity.trip = Session.get('trip');
       Meteor.call('insertActivityData', newActivity, function(error, result) {
         if (error) {
           alert(error.reason);
-        }
-        else {
+        } else {
           Session.set('editing_event', result);
           Session.set('showEditEvent', true);
         }
       });
-   });
+    });
 
-   var input = document.getElementById('pac-input');
-   map.instance.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-   var searchBox = new google.maps.places.SearchBox(input);
+    var input = document.getElementById('pac-input');
+    var searchBox = new google.maps.places.SearchBox(input);
+    map.instance.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
     google.maps.event.addListener(searchBox, 'places_changed', function() {
       var place = searchBox.getPlaces()[0];
 
       if (!place.geometry) return;
+      Meteor.call('updateTripLocation', Session.get('trip'), getUserId(), place.geometry.location.lat(), place.geometry.location.lng(), 16, function(error, result) {
+        if (error) {
+          alert(error.reason);
+        }
+      });
 
       if (place.geometry.viewport) {
         map.instance.fitBounds(place.geometry.viewport);
@@ -87,9 +108,9 @@ Template.map.onCreated(function() {
       }
     });
 
-   var markers = {};
+    var markers = {};
 
-   ActivityList.find().observe({
+    ActivityList.find().observe({
       added: function(document) {
         // Create a marker for this document
         var marker = new google.maps.Marker({
@@ -111,10 +132,9 @@ Template.map.onCreated(function() {
           Meteor.call('updateActivityLocation', marker.id, getUserId(), event.latLng.lat(), event.latLng.lng(), function(error, result) {
             if (error) {
               alert(error.reason);
-            }
-            else {
-                Session.set('editing_event', marker.id);
-                Session.set('showEditEvent', true);
+            } else {
+              Session.set('editing_event', marker.id);
+              Session.set('showEditEvent', true);
             }
           });
         });
@@ -123,9 +143,11 @@ Template.map.onCreated(function() {
         markers[document._id] = marker;
       },
       changed: function(newDocument, oldDocument) {
-        if(newDocument.lat && newDocument.lng)
-        {
-          markers[newDocument._id].setPosition({ lat: newDocument.lat, lng: newDocument.lng });
+        if (newDocument.lat && newDocument.lng) {
+          markers[newDocument._id].setPosition({
+            lat: newDocument.lat,
+            lng: newDocument.lng
+          });
         }
       },
       removed: function(oldDocument) {
@@ -140,15 +162,19 @@ Template.map.onCreated(function() {
         delete markers[oldDocument._id];
       }
     });
-    Tracker.autorun(function () {
+    Tracker.autorun(function(){
+      var coords = getLatLong();
+      latlng = new google.maps.LatLng(coords.lat, coords.lng);
+      map.instance.setCenter(latlng);
+    });
+    Tracker.autorun(function() {
       var event = Session.get('editing_event');
       var previous = Session.get('previous_editing_event');
-      if(previous && markers[previous])
-      {
+      if (previous && markers[previous]) {
         markers[previous].setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
         markers[previous].setAnimation(null);
       }
-      if(event && markers[event]){
+      if (event && markers[event]) {
         markers[event].setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
         markers[event].setAnimation(google.maps.Animation.BOUNCE);
         Session.set('previous_editing_event', event);

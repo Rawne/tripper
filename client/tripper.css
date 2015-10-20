@@ -62,3 +62,8 @@ html, body {
   height: 32px;
   z-index: 10000;
 }
+
+.controls{
+  top:10px !important;
+  width:200px;
+}

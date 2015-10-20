@@ -1,29 +1,32 @@
 Template.calendar.rendered = function() {
   var calendar = $('#calendar').fullCalendar({
-    height: 750,
-    dayClick: function(moment, allDay, jsEvent, view) {
+    height: 650,
+    select: function(start, end) {
       if (Session.get('showEditEvent')) {
         Session.set('showEditEvent', false);
         Session.set('editing_event', null);
-        return false;
+      } else if (hasEditRights()) {
+        var newActivity = {};
+        newActivity.start = start.toDate();
+        newActivity.end = end.toDate();
+        newActivity.title = "new event";
+        newActivity.trip = Session.get('trip');
+        newActivity.createdBy = getUserId();
+        Meteor.call('insertActivityData', newActivity, function(error, result) {
+          if (error) {
+            alert(error.reason);
+          } else {
+            console.log(result);
+            Session.set('editing_event', result);
+            Session.set('showEditEvent', true);
+          }
+        });
       }
-      var newActivity = {};
-      newActivity.start = moment.toDate();
-      newActivity.title = "new event";
-      newActivity.trip = Session.get('trip');
-      newActivity.createdBy = getUserId();
-      //newActivity.forPerson = Iron.Location.get().path.substring(22);
-      console.log(moment);
-      Meteor.call('insertActivityData', newActivity, function(error, result) {
-        if (error) {
-          alert(error.reason);
-        } else {
-          console.log(result);
-          Session.set('editing_event', result);
-          Session.set('showEditEvent', true);
-        }
-      });
+      $('#calendar').fullCalendar('unselect');
     },
+    selectable: true,
+    selectHelper: true,
+    allDayDefault: true,
     eventDrop: function(calEvent) {
       var startDate = calEvent.start ? calEvent.start.toDate() : null;
       var endDate = calEvent.end ? calEvent.end.toDate() : null;

@@ -31,7 +31,11 @@ Meteor.publish('Trip', function tripFunction(anonymousId){
       'updateTripInfo':function(id, userId, info){
   		return TripList.update({_id: id, createdBy: userId}, {$set:{info:info}});
   	},
-		'convertUserIds':function(oldId, newId){			
+		'updateTripLocation':function(id, userId, lat, lng, zoom){
+			console.log(lat + lng);
+		return TripList.update({_id: id, createdBy: userId}, {$set:{lat:lat, lng:lng, zoom:zoom}});
+	},
+		'convertUserIds':function(oldId, newId){
 			var result = TripList.update({createdBy: oldId}, {$set:{createdBy:newId, users:[newId]}})
 			if(result)
 			{

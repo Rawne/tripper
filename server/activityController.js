@@ -17,7 +17,7 @@
         saneActivity.trip = activity.trip;
         saneActivity.start = activity.start;
         //current implementation uses only events on 1 day, without time. not gonna be bothered to make it anymore complicated at this point. hence "start = end"
-        saneActivity.end = activity.start;
+        saneActivity.end = activity.end;
         // time is for labels only, calendar is implemented with days only!
         saneActivity.time = activity.time;
         // event type controls wether to show the item in all calendars or only 1.
