@@ -15,7 +15,7 @@
                 <div class="col-sm-6"><input id="image-field" type="text" value="" placeholder="place image link here"/></div>
                 <div class="col-sm-6"><button type="button" class="btn btn-info save-image">Add image</button></div>
             <br/><br/>
-
+            {{#if hasImages}}
             <div id="myCarousel" class="carousel slide">
               <ol class="carousel-indicators">
                 {{#each images}}
@@ -34,6 +34,7 @@
               <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
               <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
           </div>
+          {{/if}}
 
         </div>
         <div class="modal-footer">

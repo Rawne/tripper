@@ -38,9 +38,7 @@
          });
        }
      });
-   }
-   else
-   {
+   } else {
      $('#event-content.editable').html(ActivityList.findOne({
        _id: Session.get('editing_event')
      }).content);
@@ -62,7 +60,7 @@
      }
      return false;
    },
-   'hasEditRights' : function(){
+   'hasEditRights': function() {
      return hasEditRights();
    },
    'images': function() {
@@ -72,11 +70,25 @@
      var imageTemplates = [];
      var i = 0;
      activity.images.forEach(function(url) {
-        imageTemplates.push({url:url, index:i, active: i == 0 ? "active" : ""});
-        i++;
+       imageTemplates.push({
+         url: url,
+         index: i,
+         active: i == 0 ? "active" : ""
+       });
+       i++;
      });
      console.log(imageTemplates);
      return imageTemplates;
+   },
+   'hasImages': function() {
+     var activity = ActivityList.findOne({
+       _id: Session.get('editing_event')
+     });
+     if (activity.images && activity.images.length > 0) {
+       return true;
+     } else {
+       return false;
+     }
    }
  });
 
