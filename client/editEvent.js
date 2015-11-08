@@ -84,7 +84,7 @@
      var activity = ActivityList.findOne({
        _id: Session.get('editing_event')
      });
-     if (activity.images && activity.images.length > 0) {
+     if (activity && activity.images && activity.images.length > 0) {
        return true;
      } else {
        return false;

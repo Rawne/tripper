@@ -83,10 +83,18 @@ Template.calendar.rendered = function() {
 
   Tracker.autorun(function() {
     var eventId = Session.get('editing_event');
-    if (calendar)
+    if (calendar){
+      var activity = ActivityList.findOne({
+        _id: eventId
+      });
+      if(activity){
+        $('#calendar').fullCalendar('gotoDate', activity.start);
+      }
       calendar.refetchEvents();
+    }
   });
 };
+
 Template.calendar.helpers({
   editing_event: function() {
     return Session.get('editing_event');

@@ -2,17 +2,11 @@ sudo: required
 language: node_js
 node_js:
   - "0.10"
+
 before_install:
-  - curl https://install.meteor.com | /bin/sh
-
-before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - npm install -g phantomjs
-  # only needed for webdriver
-  # - export PHANTOM_PATH=`which phantomjs`
-
-script:
-  # - JASMINE_BROWSER=Firefox meteor --test --once
-  - JASMINE_BROWSER=Firefox JASMINE_CLIENT_UNIT=1 JASMINE_SERVER_UNIT=1 JASMINE_SERVER_INTEGRATION=0 meteor --test --once
-  # - JASMINE_BROWSER=Firefox meteor --test --once
+  - "curl -L http://git.io/ejPSng | /bin/sh"
+  - "npm install velocity-cli -g"
+env:
+  - TEST_COMMAND=meteor
+script: 
+- "velocity test-app --ci"
