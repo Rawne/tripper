@@ -5,18 +5,20 @@ Meteor.startup(function() {
 
 });
 
-function getLatLong()
-{
+function getLatLong() {
   var lat = -37.8136;
   var lng = 144.9631;
   var trip = TripList.findOne({
-    _id: Session.get('trip')});
-  if(trip && trip.lat && trip.lng)
-  {
+    _id: Session.get('trip')
+  });
+  if (trip && trip.lat && trip.lng) {
     lat = trip.lat;
     lng = trip.lng;
   }
-  return {lat: lat, lng:lng};
+  return {
+    lat: lat,
+    lng: lng
+  };
 }
 
 Template.map.helpers({
@@ -32,7 +34,7 @@ Template.map.helpers({
 });
 Template.map.onCreated(function() {
   GoogleMaps.ready('map', function(map) {
-    $(".map-container").droppable({
+    $('.map-container').droppable({
       drop: function(event, ui) {
         var mOffset = $(map.instance.getDiv()).offset();
         var pixel = new google.maps.Point(
@@ -65,7 +67,7 @@ Template.map.onCreated(function() {
     google.maps.event.addListener(map.instance, 'click', function(event) {
       var newActivity = {};
       newActivity.start = new Date();
-      newActivity.title = "new event";
+      newActivity.title = 'new event';
       newActivity.createdBy = getUserId();
       newActivity.lat = event.latLng.lat();
       newActivity.lng = event.latLng.lng();
@@ -162,7 +164,7 @@ Template.map.onCreated(function() {
         delete markers[oldDocument._id];
       }
     });
-    Tracker.autorun(function(){
+    Tracker.autorun(function() {
       var coords = getLatLong();
       latlng = new google.maps.LatLng(coords.lat, coords.lng);
       map.instance.setCenter(latlng);

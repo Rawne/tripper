@@ -9,7 +9,7 @@ Template.calendar.rendered = function() {
         var newActivity = {};
         newActivity.start = start.toDate();
         newActivity.end = end.toDate();
-        newActivity.title = "new event";
+        newActivity.title = 'new event';
         newActivity.trip = Session.get('trip');
         newActivity.createdBy = getUserId();
         Meteor.call('insertActivityData', newActivity, function(error, result) {
@@ -42,8 +42,8 @@ Template.calendar.rendered = function() {
       var activity = ActivityList.findOne({
         _id: calEvent.id
       });
-      $('#draggable').css("left", 500);
-      $('#draggable').css("top", 100);
+      $('#draggable').css('left', 500);
+      $('#draggable').css('top', 100);
 
       Session.set('editing_event', calEvent.id);
       Session.set('showEditEvent', true);
@@ -65,7 +65,7 @@ Template.calendar.rendered = function() {
           event.color = '#378006';
         }
         events.push(event);
-      })
+      });      
       callback(events);
     },
     editable: true
@@ -76,18 +76,18 @@ Template.calendar.rendered = function() {
   });
   Tracker.autorun(function() {
     allReqsCursor = ActivityList.find().fetch();
-    console.log("Autorun -> ", allReqsCursor.length)
+    console.log('Autorun -> ', allReqsCursor.length);
     if (calendar)
       calendar.refetchEvents();
   });
 
   Tracker.autorun(function() {
     var eventId = Session.get('editing_event');
-    if (calendar){
+    if (calendar) {
       var activity = ActivityList.findOne({
         _id: eventId
       });
-      if(activity){
+      if (activity) {
         $('#calendar').fullCalendar('gotoDate', activity.start);
       }
       calendar.refetchEvents();
