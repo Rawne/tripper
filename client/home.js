@@ -17,6 +17,19 @@ Template.homepage.events({
   }
 });
 
+Template.homepage.rendered = function() {
+  $('.owned').editable({
+    mode: 'inline',
+    success: function(response, newValue) {
+      Meteor.call('updateTripTitle', $(this).parent().attr('id'), getUserId(), newValue, function(error, result) {
+        if (error) {
+          alert(error.reason);
+        }
+      });
+    }
+  });
+}
+
 Template.homepage.helpers({
   anyTrips: function() {
     if (TripList.find({createdBy:getUserId()}).fetch().length > 0)

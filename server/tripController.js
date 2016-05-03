@@ -4,6 +4,7 @@ Meteor.publish('Trip', function tripFunction(anonymousId){
 		{
 			currentUserId = anonymousId;
 		}
+		console.log('id', currentUserId);
 		return TripList.find({users: currentUserId})
 	});
 
@@ -30,6 +31,9 @@ Meteor.publish('Trip', function tripFunction(anonymousId){
       },
       'updateTripInfo':function(id, userId, info){
   		return TripList.update({_id: id, createdBy: userId}, {$set:{info:info}});
+  	},
+      'updateTripTitle':function(id, userId, title){
+  		return TripList.update({_id: id, createdBy: userId}, {$set:{title:title}});
   	},
 		'updateTripLocation':function(id, userId, lat, lng, zoom){
 			console.log(lat + lng);

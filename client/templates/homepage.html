@@ -8,7 +8,8 @@
       <p>Your trips:</p>
     {{/if}}
     {{#each trips}}
-      <li id="{{_id}}" class="list-group-item"> <a class="trip-link" href="/trip/{{_id}}">{{title}}</a>
+      <li id="{{_id}}" class="list-group-item"> <a class="owned trip-link" href="/trip/{{_id}}" 
+                                                   data-display="{{#if title}}false{{else}}true{{/if}}">{{title}}</a>
         <button type="button" class="btn btn-danger delete label label-danger last">Delete</button>
       </li>
     {{/each}}
@@ -17,7 +18,7 @@
     <p>Trips shared with you:</p>
     {{/if}}
     {{#each sharedTrips}}
-      <li id="{{_id}}" class="list-group-item"> <a class="trip-link" href="/trip/{{_id}}">{{title}}</a>
+      <li id="{{_id}}" class="list-group-item"> <a class="shared trip-link" href="/trip/{{_id}}">{{title}}</a>
       </li>
     {{/each}}
     </ul>

@@ -28,15 +28,10 @@ Template.calendar.rendered = function() {
     selectHelper: true,
     allDayDefault: true,
     eventDrop: function(calEvent) {
-      var startDate = calEvent.start ? calEvent.start.toDate() : null;
-      var endDate = calEvent.end ? calEvent.end.toDate() : null;
-      Meteor.call('updateActivityDate', calEvent.id, getUserId(), startDate,
-        endDate,
-        function(error, result) {
-          if (error) {
-            alert(error.reason);
-          }
-        });
+      updateEvent(calEvent);
+    },
+    eventResize: function(calEvent) {
+      updateEvent(calEvent);
     },
     eventClick: function(calEvent, jsEvent, view) {
       var activity = ActivityList.findOne({
@@ -70,6 +65,18 @@ Template.calendar.rendered = function() {
     },
     editable: true
   }).data().fullCalendar;
+  
+  function updateEvent(calEvent) {
+    var startDate = calEvent.start ? calEvent.start.toDate() : null;
+      var endDate = calEvent.end ? calEvent.end.toDate() : null;
+      Meteor.call('updateActivityDate', calEvent.id, getUserId(), startDate,
+        endDate,
+        function(error, result) {
+          if (error) {
+            alert(error.reason);
+          }
+        });
+  }
 
   Tracker.autorun(function() {
     Meteor.subscribe('Activity', Session.get('trip'));

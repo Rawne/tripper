@@ -4,10 +4,11 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close cancel" data-dismiss="modal" aria-hidden="true">×</button>
-          <h4><span id="editable-title" data-type="text" data-placeholder="Enter text" data-rows="1" class="editable modal-title">{{evt.title}}</span></h4>
+          <h4><span id="editable-title" data-display="{{#if evt.title}}false{{else}}true{{/if}}" data-type="text" data-placeholder="Enter text" data-rows="1" class="editable modal-title">{{evt.title}}</span></h4>
         </div>
         <div class="modal-body">
-          <span id="event-content" class="editable" data-type="textarea" data-placeholder="Enter text" data-emptytext="Click to enter a description" data-rows="4">{{evt.content}}</span>
+          <span id="event-content" class="editable" data-display="{{#if evt.content}}false{{else}}true{{/if}}" 
+                data-type="textarea" data-placeholder="Enter text" data-emptytext="Click to enter a description" data-rows="4">{{evt.content}}</span>
 
             {{#if markerPlaced}}<div class="go-location"><a href="#" class="center">Show on map</a></div>{{/if}}
             <br/>  <br/>

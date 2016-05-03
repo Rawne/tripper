@@ -46,6 +46,7 @@
 		return ActivityList.update({_id: id, createdBy: userId}, {$set:{lat:lat, lng:lng}});
 	},
 	'updateActivityDate': function(id, userId, start, end){
+	console.log(start, end);
 	if(start)
 	{
 			return ActivityList.update({_id: id, createdBy: userId}, {$set:{start:start, end:end}});

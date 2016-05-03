@@ -2,7 +2,7 @@ Template.trip.rendered = function() {
   $('#trip-info.editable').editable({
     mode: 'inline',
     success: function(response, newValue) {
-      Meteor.call('updateTripInfo', Session.get('trip'), newValue, function(error, result) {
+      Meteor.call('updateTripInfo', Session.get('trip'), getUserId(), newValue, function(error, result) {
         if (error) {
           alert(error.reason);
         }
