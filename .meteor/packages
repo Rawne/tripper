@@ -35,3 +35,4 @@ ian:accounts-ui-bootstrap-3
 twbs:bootstrap
 natestrauser:x-editable-bootstrap
 random
+dispatch:mocha-phantomjs
